@@ -20,19 +20,10 @@ app.post("/push", function (req, res) {
 		debugger;
 		log("Starting auto.sh for " + info.repository.name);
 
-		var sh = spawn("sh", ["auto.sh"], {
-			cwd: "/projects/" + info.repository.name
-		});
-		sh.stdout.on("data", function (data) {
-			log("auto.sh for " + info.repository.name + " output");
-			log("\t" + data);
-		});
-		sh.stderr.on("data", function (data) {
-			log("auto.sh for " + info.repository.name + " error");
-			log("\t" + data);
-		});
-		sh.on("close", function (code) {
-			log("auto.sh for " + info.repository.name + " exited with " + code);
+		spawn("screen", ["-S ScriptRunner -X quit"]).on("close", function () {
+			spawn("screen" ,["-dmS ScriptRunner sh auto.sh"], {
+				cwd: "/projects/" + info.repository.name
+			});
 		});
 	}
 
