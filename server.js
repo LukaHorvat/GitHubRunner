@@ -10,7 +10,7 @@ var log = function (str) {
 	fs.appendFileSync("log", str + "\n");
 }
 
-log("New version of GitHubRunner: build 13");
+log("New version of GitHubRunner: build 14");
 
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
