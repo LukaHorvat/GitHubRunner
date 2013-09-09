@@ -10,13 +10,16 @@ var log = function (str) {
 	fs.appendFileSync("log", str + "\n");
 }
 
-log("New version of GitHubRunner: build 12");
+log("New version of GitHubRunner: build 13");
 
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
 	log("Push into " + info.repository.name + "\n");
 
 	var auto = function () {
+		debugger;
+		log("Starting auto.sh for " + info.repository.name);
+
 		var sh = spawn("sh", ["auto.sh"], {
 			cwd: "/projects/" + info.repository.name
 		});
