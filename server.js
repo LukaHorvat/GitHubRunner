@@ -8,6 +8,7 @@ app.use(express.bodyParser());
 
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
+	fs.appendFileSync("log", "Push into " + info.repository.name + "\n");
 
 	var auto = function () {
 		spawn("sh", ["auto.sh"], {
