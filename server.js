@@ -6,11 +6,15 @@ var fs = require("fs");
 
 app.use(express.bodyParser());
 
-fs.appendFileSync("log", "New version of GitHubRunner\n");
+var log = function (str) {
+	fs.appendFileSync("log", str + "\n");
+}
+
+log("New version of GitHubRunner");
 
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
-	fs.appendFileSync("log", "Push into " + info.repository.name + "\n");
+	log("Push into " + info.repository.name + "\n");
 
 	var auto = function () {
 		spawn("sh", ["auto.sh"], {
@@ -21,13 +25,15 @@ app.post("/push", function (req, res) {
 	if (!fs.existsSync("/projects/" + info.repository.name)) {
 		spawn("git", ["clone", info.repository.url + ".git"], {
 			cwd: "/projects/"
-		}, function () {
+		}).on("close", function (code) {
+			log("git clone exited with " + code);
 			auto();
 		});
 	} else {
 		spawn("git", ["pull"], {
 			cwd: "/projects/" + info.repository.name
-		}, function () {
+		}).on("close", function (code) {
+			log("git pull exited with " + code);
 			auto();
 		});
 	}
