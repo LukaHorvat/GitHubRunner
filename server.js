@@ -6,6 +6,8 @@ var fs = require("fs");
 
 app.use(express.bodyParser());
 
+fs.appendFileSync("log", "New version of GitHubRunner\n");
+
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
 	fs.appendFileSync("log", "Push into " + info.repository.name + "\n");
