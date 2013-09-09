@@ -10,15 +10,26 @@ var log = function (str) {
 	fs.appendFileSync("log", str + "\n");
 }
 
-log("New version of GitHubRunner: build 10");
+log("New version of GitHubRunner: build 11");
 
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
 	log("Push into " + info.repository.name + "\n");
 
 	var auto = function () {
-		spawn("sh", ["auto.sh"], {
+		var sh = spawn("sh", ["auto.sh"], {
 			cwd: "/projects/" + info.repository.name
+		});
+		sh.stdout.on("data", function (data) {
+			log("auto.sh for " + info.repository.name + " output");
+			log("\t" + data);
+		});
+		sh.stderr.on("data", function (data) {
+			log("auto.sh for " + info.repository.name + " error");
+			log("\t" + data);
+		});
+		sh.on("close", function (code) {
+			log("auto.sh for " + info.repository.name + " exited with " + code);
 		});
 	}
 
