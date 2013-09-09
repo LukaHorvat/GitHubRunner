@@ -6,10 +6,6 @@ var fs = require("fs");
 
 app.use(express.bodyParser());
 
-function puts(error, stdout, stderr) { sys.puts(stdout) }
-
-var cfg = {};
-
 app.post("/push", function (req, res) {
 	var info = JSON.parse(req.param("payload"));
 
