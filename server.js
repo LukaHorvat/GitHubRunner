@@ -19,11 +19,8 @@ app.post("/push", function (req, res) {
 	var auto = function () {
 		debugger;
 		log("Starting auto.sh for " + info.repository.name);
-
-		spawn("screen", ["-S ScriptRunner -X quit"]).on("close", function () {
-			spawn("screen" ,["-dmS ScriptRunner sh auto.sh"], {
+		spawn("sh" ,["auto.sh"], {
 				cwd: "/projects/" + info.repository.name
-			});
 		});
 	}
 
