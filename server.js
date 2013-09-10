@@ -32,11 +32,15 @@ app.post("/push", function (req, res) {
 			auto();
 		});
 	} else {
-		spawn("git", ["pull"], {
+		spawn("git", ["reset", "--hard", "HEAD"],{
 			cwd: "/projects/" + info.repository.name
 		}).on("close", function (code) {
-			log("git pull exited with " + code);
-			auto();
+			spawn("git", ["pull"], {
+				cwd: "/projects/" + info.repository.name
+			}).on("close", function (code) {
+				log("git pull exited with " + code);
+				auto();
+			});
 		});
 	}
 });
